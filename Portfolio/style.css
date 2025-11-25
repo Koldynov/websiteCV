@@ -1,0 +1,1463 @@
+/* --- Скидання та База --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Трохи сучасніший шрифт */
+}
+
+body {
+  background: #ffffff;
+  color: #0f0f0f;
+  overflow-x: hidden; /* Запобігає горизонтальному скролу при анімаціях */
+}
+
+/* --- Анімації (Keyframes) --- */
+
+/* 1. Виїзд навігації зверху */
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* 2. Поява тексту зліва */
+@keyframes fadeInLeft {
+  from { transform: translateX(-50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* 3. Поява фото справа */
+@keyframes fadeInRight {
+  from { transform: translateX(50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* 4. Левітація фото (постійний рух) */
+@keyframes floatImage {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0); }
+}
+
+/* 5. Курсор для друку */
+@keyframes blinkCursor {
+  50% { border-right-color: transparent; }
+}
+
+/* --- Header / Nav --- */
+header {
+  width: 100%;
+  padding: 20px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  background: rgb(254, 254, 255); /* Трохи прозорості */
+  backdrop-filter: blur(10px); /* Ефект розмиття фону під меню */
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  
+  /* Анімація появи меню */
+  animation: slideDown 0.8s ease-out;
+}
+
+header .logo {
+  font-size: 26px;
+  font-weight: 700;
+  color: #037ef1;
+  cursor: pointer;
+}
+
+nav a {
+  position: relative;
+  margin-left: 25px;
+  color: #333;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: #037ef1;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 3px;
+  background: #037ef1;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+nav a:hover::after,
+nav a.active::after {
+  width: 100%;
+}
+
+/* --- Hero Section --- */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 160px 80px 100px; /* Більше відступу зверху через fixed header */
+  min-height: 100vh; /* На весь екран */
+}
+
+.hero-text {
+  max-width: 600px;
+}
+
+/* Анімація елементів тексту з затримкою (staggering) */
+.hero-text h1 {
+  font-size: 52px;
+  font-weight: 800;
+  color: #222;
+  opacity: 0; /* Початково невидимий */
+  animation: fadeInLeft 1s ease-out forwards;
+  animation-delay: 0.2s;
+}
+
+.hero-text h2 {
+  margin-top: 10px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #444;
+  opacity: 0;
+  animation: fadeInLeft 1s ease-out forwards;
+  animation-delay: 0.4s;
+}
+
+/* Стиль для тексту, що друкується */
+.highlight {
+  color: #037ef1;
+  /* background: #eef6ff;  Можна увімкнути фон, якщо хочеться */
+  padding: 0 5px;
+  border-radius: 4px;
+  border-right: 3px solid #037ef1; /* Курсор */
+  animation: blinkCursor 0.7s steps(1) infinite; /* Блимання курсору */
+}
+
+.hero-text p {
+  margin-top: 25px;
+  line-height: 1.8;
+  color: #6e6d6d;
+  font-size: 18px;
+  opacity: 0;
+  animation: fadeInLeft 1s ease-out forwards;
+  animation-delay: 0.6s;
+}
+
+/* --- Кнопка (з твоїм кодом + анімація появи) --- */
+.btn {
+  display: inline-block;
+  margin-top: 35px;
+  padding: 14px 32px;
+  background: #037ef1;
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(3, 126, 241, 0.3);
+  
+  opacity: 0;
+  animation: fadeInLeft 1s ease-out forwards;
+  animation-delay: 0.8s;
+}
+
+.btn:hover {
+  background: #026bcc;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(3, 126, 241, 0.5);
+}
+
+.btn:active {
+  transform: translateY(-2px);
+}
+
+/* --- ВАЖЛИВО: Додаємо ключові кадри для анімацій --- */
+
+/* 1. Поява справа (для фото при завантаженні) */
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    /* Фото починає свій шлях на 100px правіше від фінальної точки */
+    transform: translateX(100px); 
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 2. Левітація (плавання вверх-вниз) */
+@keyframes floatImage {
+  0%, 100% {
+    /* Початкова і кінцева точка - на місці */
+    transform: translateY(0); 
+  }
+  50% {
+    /* В середині анімації фото піднімається на 20px вгору */
+    transform: translateY(-20px); 
+  }
+}
+
+
+/* --- Оновлені стилі секції Hero --- */
+
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 160px 60px;
+  
+  /* БУЛО: gap: 80px; */
+  /* СТАЛО (більше місця): */
+  gap: 150px; 
+  
+  min-height: 90vh;
+}
+
+.hero-text {
+  max-width: 600px;
+  /* Анімація появи тексту (якщо раптом її не було) */
+  opacity: 0;
+  animation: fadeInRight 1s ease-out forwards; 
+}
+/* ... Стилі для h1, h2, p, btn залишаються твої ... */
+
+
+/* --- Оновлені стилі для Фото --- */
+.hero-img {
+  position: relative;
+  opacity: 0;
+  /* Викликаємо анімацію появи справа */
+  animation: fadeInRight 1s ease-out forwards;
+  animation-delay: 0.4s; /* Фото з'являється трохи пізніше тексту */
+  z-index: 1;
+}
+
+.hero-img img {
+  width: 380px; /* Трохи зменшив, щоб виглядало акуратніше */
+  height: 380px;
+  border-radius: 50%;
+  object-fit: cover;
+  
+  /* СУЧАСНИЙ СТИЛЬ РАМКИ І ТІНІ */
+  border: 6px solid rgba(255, 255, 255, 0.8); /* Біла напівпрозора рамка */
+  /* Багатошарова синя тінь для ефекту "світіння" */
+  box-shadow: 
+    0 0 20px rgba(3, 126, 241, 0.3),
+    0 0 60px rgba(3, 126, 241, 0.1);
+    
+  transition: all 0.5s ease; /* Плавний перехід для ховера */
+
+  /* Викликаємо анімацію левітації (має бути після появи) */
+  /* Використовуємо коротку затримку, щоб вона почалась, коли фото вже на місці */
+  animation: floatImage 4s ease-in-out infinite 1s; 
+}
+
+/* ЕФЕКТ ПРИ НАВЕДЕННІ МИШКОЮ НА ФОТО */
+.hero-img img:hover {
+  border-color: #037ef1; /* Рамка стає синьою */
+  transform: scale(1.05); /* Фото трохи збільшується */
+  box-shadow: 
+    0 0 30px rgba(3, 126, 241, 0.5),
+    0 0 80px rgba(3, 126, 241, 0.3); /* Світіння стає сильнішим */
+}
+
+
+/* --- Адаптивність (залишаємо твою базу) --- */
+@media (max-width: 960px) {
+  .hero {
+    flex-direction: column-reverse;
+    padding: 120px 30px 60px;
+    text-align: center;
+    gap: 40px;
+  }
+  
+  .hero-text {
+    margin-top: 0; /* Прибираємо зайвий відступ, бо є gap */
+  }
+  
+  .hero-img img {
+    width: 280px;
+    height: 280px;
+  }
+}
+  
+
+  .contact-section {
+    padding: 140px 80px;
+    text-align: center;
+    animation: fadeInUp 1s ease-out forwards; 
+  }
+  
+  .contact-section h1 {
+    font-size: 46px;
+    font-weight: 800;
+  }
+  
+  .contact-desc {
+    margin-top: 10px;
+    color: #6e6d6d;
+  }
+  
+  .contact-container {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  
+  .contact-form, .contact-info {
+    background: #322f41;
+    padding: 35px;
+    border-radius: 12px;
+    width: 50%;
+  }
+  
+  .contact-form label {
+    display: block;
+    margin-top: 15px;
+    text-align: left;
+    color: #ccc;
+  }
+  
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    margin-top: 5px;
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
+    background: #47435a;
+    color: white;
+  }
+  
+  .contact-form textarea {
+    height: 140px;
+  }
+  
+  .contact-info h2 {
+    margin-bottom: 20px;
+    font-size: 30px;
+    color: #ffffff;
+  }
+
+  .contact-info p {
+    color: #ffffff;
+  }
+  
+  .social-icons {
+    margin-top: 35px;
+  }
+  
+  .social-icons a img {
+    width: 32px;
+    margin-right: 20px;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+    filter: brightness(0.8); 
+  }
+  
+  
+  .social-icons a:hover img {
+    transform: scale(1.4) rotate(10deg); 
+    filter: brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255, 0.5)); 
+  }
+
+
+
+/* --- 1. Основні налаштування та анімація появи --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px); /* Починаємо нижче */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Стаємо на місце */
+  }
+}
+
+
+.contact-section h1 {
+  font-size: 46px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #000000;
+}
+
+.contact-desc {
+  margin-top: 10px;
+  color: #b0b0b0; /* Трохи світліший для контрасту */
+  font-size: 18px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-container {
+  margin-top: 50px;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap; 
+}
+
+.contact-form, .contact-info {
+  background: #322f41;
+  padding: 40px;
+  border-radius: 16px;
+  width: 48%; 
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
+  
+  opacity: 0; 
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.contact-form {
+  animation-delay: 0.5s;
+}
+.contact-info {
+  animation-delay: 0.5s;
+}
+
+.contact-form label {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #ccc;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: 2px solid transparent; /* Прозора рамка для анімації */
+  background: #47435a;
+  color: white;
+  font-size: 16px;
+  transition: all 0.3s ease; /* Плавна зміна */
+  box-sizing: border-box; /* Щоб padding не ламав ширину */
+}
+
+.contact-form textarea {
+  height: 140px;
+  resize: vertical; /* Дозволяє розтягувати тільки по висоті */
+}
+
+/* Ефект при кліку на поле */
+.contact-form input:focus,
+.contact-form textarea:focus {
+  background: #504b66;
+  border-color: #037ef1; /* Синя рамка при фокусі */
+  outline: none;
+  box-shadow: 0 0 10px rgba(3, 126, 241, 0.3); /* Легке світіння */
+  transform: scale(1.01); /* Ледь помітне збільшення */
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 14px 32px;
+  background: #037ef1;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(3, 126, 241, 0.3);
+  width: 100%; 
+}
+
+.btn:hover {
+  background: #026bcc;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(3, 126, 241, 0.5);
+}
+
+.btn:active {
+  transform: translateY(-1px);
+}
+
+.contact-info h2 {
+  margin-bottom: 25px;
+  font-size: 32px;
+  color: #ffffff;
+}
+
+.contact-info p {
+  color: #e0e0e0;
+  margin-bottom: 15px;
+  font-size: 17px;
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  transition: 0.3s;
+}
+
+/* Ефект при наведенні на текст контактів */
+.contact-info p:hover {
+  transform: translateX(5px); /* Зсувається вправо */
+  color: #037ef1;
+}
+
+
+
+
+
+
+
+
+
+  
+
+
+
+.experience-section {
+  padding: 140px 20px; /* Відступи для контенту */
+  max-width: 1000px;
+  margin: 0 auto; /* Центрування секції */
+}
+
+.exp-logo {
+  height: 100px;       /* Маленький акуратний розмір */
+  width: auto;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.exp-logo1 {
+  height: 60px;       /* Маленький акуратний розмір */
+  width: auto;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 15px;
+}
+
+
+
+.subtitle {
+  text-align: center;
+  color: #6e6d6d;
+  font-size: 18px;
+  margin-bottom: 60px;
+  
+  opacity: 0;
+  animation: fadeDown 0.8s ease-out forwards 0.2s;
+}
+
+/* --- Timeline Structure --- */
+.timeline {
+  position: relative;
+  margin: 0 auto;
+  padding-left: 30px; /* Відступ зліва для карток */
+}
+
+/* Вертикальна лінія */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px; /* Товщина лінії */
+  height: 100%;
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+/* Окремий елемент таймлайну */
+.timeline-item {
+  position: relative;
+  margin-bottom: 40px;
+  
+  /* Початковий стан для анімації */
+  opacity: 0;
+  transform: translateX(-30px); /* Зсув вліво */
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+/* Затримка анімації для кожного елемента (каскад) */
+.timeline-item:nth-child(1) { animation-delay: 0.4s; }
+.timeline-item:nth-child(2) { animation-delay: 0.6s; }
+.timeline-item:nth-child(3) { animation-delay: 0.8s; }
+
+/* --- Dots (Крапки на лінії) --- */
+.timeline-dot {
+  position: absolute;
+  left: -39px; /* Центруємо відносно лінії */
+  top: 20px;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border: 4px solid #037ef1; /* Синя обводка */
+  border-radius: 50%;
+  z-index: 1;
+  transition: 0.3s;
+  box-shadow: 0 0 0 4px rgba(3, 126, 241, 0.1); /* Легка тінь */
+}
+
+/* Ефект при наведенні на блок */
+.timeline-item:hover .timeline-dot {
+  background: #037ef1;
+  box-shadow: 0 0 0 8px rgba(3, 126, 241, 0.2); /* Збільшення тіні */
+  transform: scale(1.1);
+}
+
+/* --- Cards (Картки з контентом) --- */
+.timeline-content {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  border-left: 5px solid #037ef1; /* Синій акцент зліва */
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Стрілочка (трикутник) зліва від картки */
+.timeline-content::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 24px;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid #037ef1;
+}
+
+.timeline-content:hover {
+  transform: translateY(-5px); /* Картка піднімається */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-content .date {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #037ef1;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.timeline-content h2 {
+  font-size: 24px;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.timeline-content .company {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.timeline-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* --- Keyframe Animations --- */
+
+/* Поява зверху вниз */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Поява зліва направо */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+
+
+/* --- Skills Section Layout --- */
+.skills-section {
+  padding: 140px 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  font-size: 46px;
+  font-weight: 800;
+  color: #222;
+  margin-bottom: 10px;
+  animation: fadeDown 0.8s ease-out forwards;
+}
+
+.subtitle {
+  color: #6e6d6d;
+  font-size: 18px;
+  margin-bottom: 60px;
+  animation: fadeDown 0.8s ease-out forwards 0.2s;
+}
+
+/* Заголовки категорій (Technical, Soft, Languages) */
+.category-title {
+  font-size: 28px;
+  color: #037ef1;
+  margin: 60px 0 30px 0;
+  position: relative;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+/* Лінія під заголовком */
+.category-title::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: #037ef1;
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* --- 1. Technical Skills Grid --- */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Трохи ширші картки */
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.skill-card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  text-align: left;
+  transition: 0.3s;
+  border: 1px solid rgba(0,0,0,0.02);
+  
+  /* Анімація появи картки */
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+.skill-card:nth-child(1) { animation-delay: 0.2s; }
+.skill-card:nth-child(2) { animation-delay: 0.3s; }
+.skill-card:nth-child(3) { animation-delay: 0.4s; }
+.skill-card:nth-child(4) { animation-delay: 0.5s; }
+
+.skill-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(3, 126, 241, 0.15);
+}
+
+.skill-card h3 {
+  margin-bottom: 20px;
+  color: #037ef1;
+  font-size: 22px;
+  font-weight: 700;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+  display: inline-block;
+}
+
+/* --- Progress Bars Styles --- */
+.skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.skill-item {
+  width: 100%;
+}
+
+.skill-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #444;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #eef1f5; /* Сірий фон смужки */
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #037ef1, #00c6ff); 
+  border-radius: 10px;
+  width: 0; 
+  
+  animation: fillBar 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  animation-delay: 0.5s; 
+}
+
+@keyframes fillBar {
+  from { width: 0; }
+  to { width: var(--w); } 
+}
+
+.progress-bar {
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.soft-skills-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  max-width: 800px;
+  margin: 0 auto;
+  
+  opacity: 0;
+  animation: fadeDown 0.8s ease-out forwards 0.6s; /* З'являється пізніше */
+}
+
+.soft-tag {
+  background: white;
+  color: #037ef1;
+  border: 2px solid #037ef1;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: 0.3s;
+  cursor: default;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.soft-tag:hover {
+  background: #037ef1;
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(3, 126, 241, 0.3);
+}
+
+/* --- 3. Languages (Flags Row) --- */
+.languages-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.lang-card {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: 0.3s;
+  min-width: 220px;
+
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.6s ease-out forwards 0.8s; /* Найпізніша поява */
+}
+
+.lang-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.flag {
+  font-size: 42px; /* Розмір прапора */
+  line-height: 1;
+}
+
+.lang-info {
+  text-align: left;
+}
+
+.lang-info h4 {
+  font-size: 18px;
+  color: #222;
+  margin-bottom: 4px;
+}
+
+.lang-info span {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Стиль для контейнера прапора */
+.flag {
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px; /* Відступ від тексту */
+}
+
+/* ГОЛОВНЕ ВИПРАВЛЕННЯ: Стиль для самої картинки прапора */
+.flag img {
+  width: 36px;       /* Фіксована ширина */
+  height: 36px;      /* Фіксована висота */
+  object-fit: cover; /* Щоб прапор гарно заповнював коло */
+  border-radius: 50%; /* Робимо прапор круглим */
+  border: 1px solid #e0e0e0; /* Тонка рамка для краси */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Легка тінь */
+}
+
+/* --- Animation Keyframes --- */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile fix */
+@media (max-width: 768px) {
+  .languages-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .lang-card {
+    width: 100%;
+  }
+}
+
+
+
+
+/* Projects */
+
+.projects-section {
+  padding: 140px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  font-size: 46px;
+  font-weight: 800;
+  color: #222;
+  margin-bottom: 10px;
+  opacity: 0;
+  animation: fadeDown 0.8s ease-out forwards;
+}
+
+.subtitle {
+  color: #6e6d6d;
+  font-size: 18px;
+  margin-bottom: 60px;
+  opacity: 0;
+  animation: fadeDown 0.8s ease-out forwards 0.2s;
+}
+
+/* --- Grid Container --- */
+.projects-container {
+  display: grid;
+  
+  /* БУЛО: repeat(auto-fit, minmax(300px, 1fr)); */
+  /* СТАЛО (Змінив на auto-fill): */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+  
+  gap: 40px;
+  padding: 10px;
+}
+
+/* --- Project Card --- */
+/* --- Project Card (Оновлений) --- */
+.project-card {
+  background: #ffffff;
+  border-radius: 16px;
+  /* Важливо: прибираємо відступи з самої картки, щоб фото торкалось країв */
+  padding: 0; 
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0,0,0,0.03);
+  transition: all 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden; /* Щоб картинка не вилазила за заокруглені кути */
+  
+  /* Анімація появи */
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fadeInUpCard 0.6s ease-out forwards;
+}
+
+/* --- Стилі для картинки --- */
+.project-img {
+  width: 100%;
+  height: 200px; /* Фіксована висота картинки */
+  overflow: hidden; /* Для ефекту zoom */
+}
+
+.project-img img {
+  width: 100%;
+  height: 100%;
+  
+  /* 1. Заповнюємо весь блок (картинка розтягнеться) */
+  object-fit: cover; 
+  
+  /* 2. ВАЖЛИВО: Кажемо браузеру фокусуватися на НИЖНІЙ частині картинки */
+  /* Оскільки у платформерах земля знизу, це покаже найцікавіше */
+  object-position: center bottom; 
+  
+  transition: transform 0.5s ease;
+}
+
+
+.project-card:hover .project-img img {
+  transform: scale(1.1);
+}
+
+.card-content {
+  padding: 25px; 
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; 
+}
+
+.project-card h2 {
+  font-size: 24px;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.project-card p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  flex-grow: 1;
+}
+
+/* Затримки анімації (ті самі, що були) */
+.project-card:nth-child(1) { animation-delay: 0.3s; }
+.project-card:nth-child(2) { animation-delay: 0.4s; }
+.project-card:nth-child(3) { animation-delay: 0.5s; }
+.project-card:nth-child(4) { animation-delay: 0.6s; }
+
+/* Ховер ефект для всієї картки */
+.project-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(3, 126, 241, 0.15);
+}
+
+/* --- Filter Buttons --- */
+.filter-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  
+  /* Анімація появи кнопок */
+  opacity: 0;
+  animation: fadeDown 0.8s ease-out forwards 0.4s;
+}
+
+.filter-btn {
+  padding: 10px 24px;
+  border: 2px solid #037ef1;
+  background: transparent;
+  color: #037ef1;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(3, 126, 241, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Активна кнопка (натиснута) */
+.filter-btn.active {
+  background: #037ef1;
+  color: white;
+  box-shadow: 0 4px 10px rgba(3, 126, 241, 0.3);
+}
+
+/* Клас для приховування карток */
+.project-card.hide {
+  display: none; /* Прибирає елемент з сітки */
+}
+
+/* Анімація появи відфільтрованих карток */
+.project-card.show {
+  animation: fadeInProject 0.5s ease-out forwards;
+}
+
+/* --- Стилі для тегів технологій --- */
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap; /* Якщо тегів багато, переносить на новий рядок */
+  gap: 8px; /* Відступ між тегами */
+  margin-bottom: 15px; /* Відступ від тегів до тексту опису */
+}
+
+.tech-tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: #f0f4f8; /* Світло-сірий фон для технологій */
+  color: #555;
+  border: 1px solid #e1e4e8;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Спеціальний стиль для Solo/Team (щоб виділялися) */
+.tech-tag.mode {
+  background: #e3f2fd; /* Світло-блакитний */
+  color: #037ef1;
+  border-color: #bbdefb;
+}
+
+/* Спеціальний стиль для Team (можна зробити іншим кольором, наприклад, фіолетовим) */
+.tech-tag.mode.team {
+  background: #f3e5f5; /* Світло-фіолетовий */
+  color: #8e24aa;
+  border-color: #e1bee7;
+}
+
+@keyframes fadeInProject {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --- Button Styles --- */
+.btn {
+  display: inline-block;
+  padding: 12px 25px;
+  background: transparent;
+  color: #037ef1;
+  text-decoration: none;
+  border: 2px solid #037ef1; /* Тільки рамка спочатку */
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: 0.3s;
+  text-align: center;
+  width: fit-content; /* Ширина по тексту */
+}
+
+.btn:hover {
+  background: #037ef1;
+  color: white;
+  box-shadow: 0 5px 15px rgba(3, 126, 241, 0.4);
+  transform: translateY(-2px);
+}
+
+/* --- Keyframe Animations --- */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUpCard {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.education-section {
+  padding: 140px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+  font-size: 46px;
+  font-weight: 800;
+  color: #222;
+  margin-bottom: 10px;
+  
+  opacity: 0;
+  animation: fadeDown 0.8s ease-out forwards;
+}
+
+.subtitle {
+  text-align: center;
+  color: #6e6d6d;
+  font-size: 18px;
+  margin-bottom: 60px;
+  
+  opacity: 0;
+  animation: fadeDown 0.8s ease-out forwards 0.2s;
+}
+
+/* --- Timeline Structure --- */
+.timeline {
+  position: relative;
+  margin: 0 auto;
+  padding-left: 30px;
+}
+
+/* Сіра лінія зліва */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+/* Блок кожного пункту */
+.timeline-item {
+  position: relative;
+  margin-bottom: 40px;
+  
+  opacity: 0;
+  transform: translateX(-30px);
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+/* Каскадна анімація (по черзі) */
+.timeline-item:nth-child(1) { animation-delay: 0.3s; }
+.timeline-item:nth-child(2) { animation-delay: 0.5s; }
+.timeline-item:nth-child(3) { animation-delay: 0.7s; }
+
+/* --- Dots (Крапки) --- */
+.timeline-dot {
+  position: absolute;
+  left: -39px;
+  top: 20px;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border: 4px solid #037ef1;
+  border-radius: 50%;
+  z-index: 1;
+  transition: 0.3s;
+  box-shadow: 0 0 0 4px rgba(3, 126, 241, 0.1);
+}
+
+.timeline-item:hover .timeline-dot {
+  background: #037ef1;
+  transform: scale(1.2);
+  box-shadow: 0 0 0 8px rgba(3, 126, 241, 0.2);
+}
+
+/* --- Cards (Картки) --- */
+.timeline-content {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  border-left: 5px solid #037ef1;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Трикутник-вказівник */
+.timeline-content::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 24px;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid #037ef1;
+}
+
+/* Ефект наведення на картку */
+.timeline-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Текстове наповнення */
+.timeline-content .date {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #037ef1;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.timeline-content h2 {
+  font-size: 24px;
+  margin-bottom: 5px;
+  color: #222;
+}
+
+.timeline-content .degree {
+  display: block;
+  font-size: 17px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.timeline-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #666;
+}
+
+.timeline-content p strong {
+  color: #333;
+}
+
+/* --- Animations Keyframes --- */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+
+
+/* --- Styles for File Download Page (SAE) --- */
+
+.files-section {
+  padding: 140px 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.files-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+}
+
+/* Картка файлу */
+.file-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-decoration: none; /* Прибираємо підкреслення */
+  color: #333;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.03);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+
+  /* Анімація появи */
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+/* Затримка анімації для кожної картки */
+.file-card:nth-child(1) { animation-delay: 0.1s; }
+.file-card:nth-child(2) { animation-delay: 0.2s; }
+.file-card:nth-child(3) { animation-delay: 0.3s; }
+.file-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Ховер ефект */
+.file-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(3, 126, 241, 0.15);
+  border-color: #037ef1;
+}
+
+/* Іконка файлу зліва */
+.icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.icon-box.red { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; }
+.icon-box.blue { background: rgba(3, 126, 241, 0.1); color: #037ef1; }
+.icon-box.green { background: rgba(46, 204, 113, 0.1); color: #2ecc71; }
+
+/* Текст інформації */
+.file-info {
+  text-align: left;
+  flex-grow: 1;
+}
+
+.file-info h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #222;
+}
+
+.file-info span {
+  font-size: 13px;
+  color: #888;
+  font-weight: 500;
+}
+
+/* Іконка завантаження справа */
+.download-icon {
+  color: #ccc;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.file-card:hover .download-icon {
+  color: #037ef1;
+  transform: translateY(3px); /* Стрілочка рухається вниз при наведенні */
+}

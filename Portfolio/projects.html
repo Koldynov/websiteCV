@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects - Vladyslav SMALIICHUK</title>
+  <link rel="icon" href="cv.png" type="image/png">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body class="projects-page">
+
+  <header>
+    <div class="logo">Portfolio</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="experiences.html">Experiences</a>
+      <a href="education.html">Education</a>
+      <a href="skills.html">Skills</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="projects-section">
+    <h1 class="title">My Projects</h1>
+    <p class="subtitle">Here are some of the works I've developed.</p>
+
+    <div class="filter-container">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="phaser">Phaser 3</button>
+      <button class="filter-btn" data-filter="web">Web Dev</button>
+      <button class="filter-btn" data-filter="solo">Solo Work</button>
+      <button class="filter-btn" data-filter="team">Team Work</button>
+      <button class="filter-btn" data-filter="academic">Academic</button>
+    </div>
+
+    <div class="projects-container">
+
+      <div class="project-card" data-category="web solo">
+        <div class="project-img">
+          <img src="site.png" alt="Website">
+        </div>
+        <div class="card-content">
+          <h2>Portfolio Website</h2>
+          
+          <div class="tags-container">
+            <span class="tech-tag mode"><i class="fa-solid fa-user"></i> Solo</span>
+            <span class="tech-tag">HTML</span>
+            <span class="tech-tag">CSS</span>
+            <span class="tech-tag">JS</span>
+          </div>
+
+          <p>A modern responsive portfolio built with HTML, CSS, and JavaScript. Features animations and clean UI.</p>
+          <a href="https://github.com/Koldynov/portfolio_website" class="btn">View Code</a>
+        </div>
+      </div>
+
+      <div class="project-card" data-category="academic game phaser solo">
+        <div class="project-img">
+          <img src="catcher.png" alt="Catcher">
+        </div>
+        <div class="card-content">
+          <h2>Coin Catcher</h2>
+
+          <div class="tags-container">
+            <span class="tech-tag mode"><i class="fa-solid fa-user"></i> Solo</span>
+            <span class="tech-tag">Phaser 3</span>
+            <span class="tech-tag">HTML</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">Physics</span>
+          </div>
+
+          <p>Browser-based 2D game. Dodge falling bombs and collect coins using Arcade Physics.</p>
+          <a href="game/td1.html" class="btn" target="_blank">Play Demo</a>
+        </div>
+      </div>
+
+      <div class="project-card" data-category="academic team sql">
+        <div class="project-img">
+          <img src="mcd.png" alt="Mcd">
+        </div>
+        <div class="card-content">
+          <h2>SAE: Academic Group Project</h2>
+
+          <div class="tags-container">
+            <span class="tech-tag mode team"><i class="fa-solid fa-users"></i> Team</span>
+            <span class="tech-tag">SQL</span>
+            <span class="tech-tag">Merise (MCD)</span>
+            <span class="tech-tag">Agile</span>
+          </div>
+
+          <p>Team-based academic project. Created data models, optimized SQL queries, and documentation.</p>
+          <a href="sae_project.html" class="btn">View Project</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
